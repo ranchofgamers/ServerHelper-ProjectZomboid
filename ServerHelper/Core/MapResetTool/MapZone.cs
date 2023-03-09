@@ -88,7 +88,7 @@ namespace ServerHelper.Core.MapResetTool
         }
         public static void ZonesSerialize(List<MapZone> zones, string path, string type)
         {            
-            //TODO: оставить ID или заменить на название?
+            //TODO: ID или заменить на название?
             string result = "";
 
             MapZoneType mapZoneType;
