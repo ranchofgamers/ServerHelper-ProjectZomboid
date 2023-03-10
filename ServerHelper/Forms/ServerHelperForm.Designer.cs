@@ -98,7 +98,7 @@
             this.groupBox3.ForeColor = System.Drawing.Color.Black;
             this.groupBox3.Location = new System.Drawing.Point(12, 12);
             this.groupBox3.Name = "groupBox3";
-            this.groupBox3.Size = new System.Drawing.Size(456, 345);
+            this.groupBox3.Size = new System.Drawing.Size(456, 491);
             this.groupBox3.TabIndex = 8;
             this.groupBox3.TabStop = false;
             this.groupBox3.Text = "RCON";
@@ -107,7 +107,7 @@
             // 
             this.isRconAutoRestart_cb.AutoSize = true;
             this.isRconAutoRestart_cb.ForeColor = System.Drawing.Color.Black;
-            this.isRconAutoRestart_cb.Location = new System.Drawing.Point(9, 224);
+            this.isRconAutoRestart_cb.Location = new System.Drawing.Point(12, 260);
             this.isRconAutoRestart_cb.Name = "isRconAutoRestart_cb";
             this.isRconAutoRestart_cb.Size = new System.Drawing.Size(159, 43);
             this.isRconAutoRestart_cb.TabIndex = 24;
@@ -118,7 +118,7 @@
             // 
             this.groupBox9.Controls.Add(this.serverIP_tb);
             this.groupBox9.ForeColor = System.Drawing.Color.Black;
-            this.groupBox9.Location = new System.Drawing.Point(9, 23);
+            this.groupBox9.Location = new System.Drawing.Point(6, 45);
             this.groupBox9.Name = "groupBox9";
             this.groupBox9.Size = new System.Drawing.Size(181, 48);
             this.groupBox9.TabIndex = 26;
@@ -137,7 +137,7 @@
             // 
             this.groupBox8.Controls.Add(this.rconPort_tb);
             this.groupBox8.ForeColor = System.Drawing.Color.Black;
-            this.groupBox8.Location = new System.Drawing.Point(9, 77);
+            this.groupBox8.Location = new System.Drawing.Point(6, 99);
             this.groupBox8.Name = "groupBox8";
             this.groupBox8.Size = new System.Drawing.Size(181, 48);
             this.groupBox8.TabIndex = 25;
@@ -156,7 +156,7 @@
             // 
             this.groupBox7.Controls.Add(this.rconPassword_tb);
             this.groupBox7.ForeColor = System.Drawing.Color.Black;
-            this.groupBox7.Location = new System.Drawing.Point(9, 131);
+            this.groupBox7.Location = new System.Drawing.Point(6, 153);
             this.groupBox7.Name = "groupBox7";
             this.groupBox7.Size = new System.Drawing.Size(181, 48);
             this.groupBox7.TabIndex = 24;
@@ -175,7 +175,7 @@
             // 
             this.groupBox6.Controls.Add(this.rconSendCommand_tb);
             this.groupBox6.ForeColor = System.Drawing.Color.Black;
-            this.groupBox6.Location = new System.Drawing.Point(199, 240);
+            this.groupBox6.Location = new System.Drawing.Point(199, 386);
             this.groupBox6.Name = "groupBox6";
             this.groupBox6.Size = new System.Drawing.Size(239, 48);
             this.groupBox6.TabIndex = 23;
@@ -195,7 +195,7 @@
             this.groupBox4.Controls.Add(this.serverResponce_rtb);
             this.groupBox4.Location = new System.Drawing.Point(199, 39);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(242, 195);
+            this.groupBox4.Size = new System.Drawing.Size(242, 341);
             this.groupBox4.TabIndex = 24;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Ответ сервера";
@@ -206,7 +206,7 @@
             this.serverResponce_rtb.Location = new System.Drawing.Point(3, 16);
             this.serverResponce_rtb.Name = "serverResponce_rtb";
             this.serverResponce_rtb.ReadOnly = true;
-            this.serverResponce_rtb.Size = new System.Drawing.Size(236, 176);
+            this.serverResponce_rtb.Size = new System.Drawing.Size(236, 322);
             this.serverResponce_rtb.TabIndex = 23;
             this.serverResponce_rtb.Text = "";
             // 
@@ -223,7 +223,7 @@
             // rconSendCommand_btn
             // 
             this.rconSendCommand_btn.ForeColor = System.Drawing.Color.Black;
-            this.rconSendCommand_btn.Location = new System.Drawing.Point(199, 292);
+            this.rconSendCommand_btn.Location = new System.Drawing.Point(199, 438);
             this.rconSendCommand_btn.Name = "rconSendCommand_btn";
             this.rconSendCommand_btn.Size = new System.Drawing.Size(239, 40);
             this.rconSendCommand_btn.TabIndex = 17;
@@ -234,9 +234,9 @@
             // rconConnect_btn
             // 
             this.rconConnect_btn.ForeColor = System.Drawing.Color.Black;
-            this.rconConnect_btn.Location = new System.Drawing.Point(6, 187);
+            this.rconConnect_btn.Location = new System.Drawing.Point(12, 223);
             this.rconConnect_btn.Name = "rconConnect_btn";
-            this.rconConnect_btn.Size = new System.Drawing.Size(184, 31);
+            this.rconConnect_btn.Size = new System.Drawing.Size(169, 31);
             this.rconConnect_btn.TabIndex = 8;
             this.rconConnect_btn.Text = "Подключить RCON";
             this.rconConnect_btn.UseVisualStyleBackColor = true;
@@ -245,9 +245,9 @@
             // saveRconSettings_btn
             // 
             this.saveRconSettings_btn.ForeColor = System.Drawing.Color.Black;
-            this.saveRconSettings_btn.Location = new System.Drawing.Point(6, 292);
+            this.saveRconSettings_btn.Location = new System.Drawing.Point(12, 309);
             this.saveRconSettings_btn.Name = "saveRconSettings_btn";
-            this.saveRconSettings_btn.Size = new System.Drawing.Size(184, 40);
+            this.saveRconSettings_btn.Size = new System.Drawing.Size(169, 40);
             this.saveRconSettings_btn.TabIndex = 7;
             this.saveRconSettings_btn.Text = "Сохранить настройки";
             this.saveRconSettings_btn.UseVisualStyleBackColor = true;
@@ -323,7 +323,7 @@
             this.groupBox1.ForeColor = System.Drawing.Color.Black;
             this.groupBox1.Location = new System.Drawing.Point(474, 13);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(499, 344);
+            this.groupBox1.Size = new System.Drawing.Size(499, 363);
             this.groupBox1.TabIndex = 21;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Сервер";

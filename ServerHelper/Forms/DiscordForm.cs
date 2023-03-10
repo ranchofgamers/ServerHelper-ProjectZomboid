@@ -24,8 +24,8 @@ namespace ServerHelper.Forms
 {
     public partial class DiscordForm : Form, IForm
     {
-        public GSSChartBuilder GSSChart { get; private set; }
         public BotShell DiscordBot { get; private set; }
+        public GSSChartForm ChartForm { get; private set; }
 
         private DateTime currentDatToLog;
         public DiscordForm()
@@ -35,9 +35,6 @@ namespace ServerHelper.Forms
             InitSettings();
 
             currentDatToLog = DateTime.UtcNow.Date;
-
-            GSSChart = new GSSChartBuilder("GSSChart", Settings.Default.GSSSourceFilePath, GSSChartBox);
-            GSSChart.Deserialize();
 
             DiscordBot = new BotShell(Settings.Default.DiscordBotToken, Settings.Default.DiscordServerId, "Main");
             DiscordBot.Log += DiscordBot_Log; ;
@@ -129,6 +126,20 @@ namespace ServerHelper.Forms
             }
             catch (Exception) { throw; }
         }
+        private void ShowMessageWhenChartNotOpen()
+        {
+            MessageBox.Show("Для работы необходимо открыть форму с графиком.",
+                            "Откройте форму с графиком",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
+        }
+        private void ShowMessageWhenDiscordBotDisconnected()
+        {
+            MessageBox.Show("Дискорд бот не подключен",
+                            "Подключите дискорд бота",
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error);
+        }
         #endregion
 
         #region Обработчики нажатия кнопок
@@ -143,7 +154,13 @@ namespace ServerHelper.Forms
         {
             if (!DiscordBot.IsOnline)
             {
-                MessageBox.Show("Дискорд бот отключен.");
+                ShowMessageWhenDiscordBotDisconnected();
+                return;
+            }
+
+            if (ChartForm == null || ChartForm.IsDisposed)
+            {
+                ShowMessageWhenChartNotOpen();
                 return;
             }
 
@@ -153,26 +170,24 @@ namespace ServerHelper.Forms
         }
         private void addGSS_btn_Click(object sender, EventArgs e)
         {
-            var point = GSSChartBox.Series[0].Points.Add();
-            point.SetValueXY(0, 1);
-            point.Label = "#PERCENT{P}";
-            point.LegendText = addGSS_tb.Text;
+            if (ChartForm == null || ChartForm.IsDisposed)
+            {
+                ShowMessageWhenChartNotOpen();
+                return;
+            }
+
+            ChartForm.AddGSS(addGSS_tb.Text);
             addGSS_tb.Clear();
-            GSSChart.Serialize();
         }
         private void removeGSS_btn_Click(object sender, EventArgs e)
         {
-            var col = GSSChartBox.Series[0].Points;
-            foreach (var point in col)
+            if (ChartForm == null || ChartForm.IsDisposed)
             {
-                if (point.LegendText == removeGSS_tb.Text)
-                {
-                    GSSChartBox.Series[0].Points.Remove(point);
-                    removeGSS_tb.Clear();
-                    GSSChart.Serialize();
-                    return;
-                }
+                ShowMessageWhenChartNotOpen();
+                return;
             }
+
+            ChartForm.RemoveGSS(removeGSS_tb.Text);
             removeGSS_tb.Clear();
         }
         private void saveSettings_btn_Click(object sender, EventArgs e)
@@ -189,15 +204,18 @@ namespace ServerHelper.Forms
 
                 SendChartTimer.Interval = 60000 * Settings.Default.SendChartInterval;
 
-                bool updateChart = false;
-                while (!updateChart)
+                if (ChartForm != null && !ChartForm.IsDisposed)
                 {
-                    try
+                    bool updateChart = false;
+                    while (!updateChart)
                     {
-                        GSSChart.UpdateInfo(null, Settings.Default.GSSSourceFilePath, null);
-                        updateChart = true;
+                        try
+                        {
+                            ChartForm.GSSChart.UpdateInfo(null, Settings.Default.GSSSourceFilePath, null);
+                            updateChart = true;
+                        }
+                        catch (InvalidOperationException) { updateChart = false; }
                     }
-                    catch (InvalidOperationException){ updateChart = false;}
                 }
 
                 Settings.Default.Save();
@@ -206,12 +224,22 @@ namespace ServerHelper.Forms
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Произошла ошибка при попытке сохранения данных: " + ex.Message);
+                MessageBox.Show("Произошла ошибка при попытке сохранения данных: " + ex.Message,
+                                "Ошибка сохраненя данных",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
             }
         }
         private async void botConnect_btn_Click(object sender, EventArgs e)
         {
             await SwitchBotState();
+        }
+        private void openGSSChartForm_btn_Click(object sender, EventArgs e)
+        {
+            if(ChartForm == null || ChartForm.IsDisposed)
+                ChartForm = new GSSChartForm();
+
+            ChartForm.Show();
         }
         #endregion
 
@@ -309,8 +337,8 @@ namespace ServerHelper.Forms
         #region Ежесекундные обработчики событий
         private async void RedrawGSSChartAsync(object sender, EventArgs e)
         {
-            if (!GSSChart.IsUpdating)
-                await GSSChart.UpdateGraphAsync();
+            if (ChartForm != null && !ChartForm.IsDisposed && !ChartForm.GSSChart.IsUpdating)
+                await ChartForm.GSSChart.UpdateGraphAsync();
         }
         private void ChartAutoSendСhecker(object sender, EventArgs e)
         {
@@ -336,6 +364,7 @@ namespace ServerHelper.Forms
         }
         #endregion
 
+        #region Специфические обработчики
         private void DigitTB_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (sender is TextBox)
@@ -348,5 +377,6 @@ namespace ServerHelper.Forms
             }
             else e.Handled = true;
         }
+        #endregion
     }
 }

@@ -227,6 +227,12 @@
     <Compile Include="Forms\DiscordForm.Designer.cs">
       <DependentUpon>DiscordForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\GSSChartForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\GSSChartForm.Designer.cs">
+      <DependentUpon>GSSChartForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\MapCalibrationForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -274,6 +280,9 @@
     <Compile Include="Core\Visualization\ThemeColor.cs" />
     <EmbeddedResource Include="Forms\DiscordForm.resx">
       <DependentUpon>DiscordForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\GSSChartForm.resx">
+      <DependentUpon>GSSChartForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\MapCalibrationForm.resx">
       <DependentUpon>MapCalibrationForm.cs</DependentUpon>

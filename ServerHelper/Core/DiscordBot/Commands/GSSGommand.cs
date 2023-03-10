@@ -8,6 +8,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Interop;
 
 namespace ServerHelper.Core.DiscordBot.Commands
 {
@@ -16,16 +17,9 @@ namespace ServerHelper.Core.DiscordBot.Commands
         public CommandConfig Config { get; set; }
 
         private bool isHandling = false;
-        private bool appWasMinimize = false;
-        private MainForm mainForm;
-        private DiscordForm discordForm;
-        private Form activeForm;
-        private Button activeButton;
 
         private GSSGommand()
         {
-            mainForm = FormManager.Forms.Find(m => m.GetType() == typeof(MainForm)) as MainForm;
-            discordForm = FormManager.Forms.Find(m => m.GetType() == typeof(DiscordForm)) as DiscordForm;
         }
 
         public async Task FromChatHandler(BotShell bot, SocketMessage msg)
@@ -36,8 +30,16 @@ namespace ServerHelper.Core.DiscordBot.Commands
             isHandling = true;
             try
             {
-                await RemoveAllMessagesAsync(bot, msg.Channel.Id);
-                await bot.SendFileAsync(msg.Channel.Id, SaveGraph().Result);
+                var path = SaveGraph().Result;
+                if (path == null)
+                {
+                    await bot.SendMessageAsync(msg.Channel.Id, "Не удалось обновить график т.к. форма с графиком закрыта");
+                }
+                else
+                {
+                    await RemoveAllMessagesAsync(bot, msg.Channel.Id);
+                    await bot.SendFileAsync(msg.Channel.Id, path);
+                }
             }
             catch (Exception) { throw; }
             finally { isHandling = false; }
@@ -61,8 +63,17 @@ namespace ServerHelper.Core.DiscordBot.Commands
                     throw new InvalidCastException("Команда ожидала ulong ID канала в качестве первого аргумента: " + ex.Message);
                 }
 
-                await RemoveAllMessagesAsync(bot, cannelid);
-                await bot.SendFileAsync(cannelid, SaveGraph().Result);
+                var path = SaveGraph().Result;
+                if (path == null)
+                {
+                    await RemoveAllMessagesAsync(bot, cannelid);
+                    await bot.SendMessageAsync(cannelid, "Не удалось обновить график т.к. форма с графиком закрыта");
+                }
+                else
+                {
+                    await RemoveAllMessagesAsync(bot, cannelid);
+                    await bot.SendFileAsync(cannelid, path);
+                }
             }
             catch (Exception) { throw; }
             finally { isHandling = false; }
@@ -85,8 +96,12 @@ namespace ServerHelper.Core.DiscordBot.Commands
         }
         private async Task<string> SaveGraph()
         {
-            GSSChartBuilder gssChartBuilder;
-            gssChartBuilder = ModuleManager.Modules.Find(m => m.GetType() == typeof(GSSChartBuilder)) as GSSChartBuilder;
+            GSSChartBuilder gssChartBuilder = ModuleManager.Modules.Find(m => m.GetType() == typeof(GSSChartBuilder)) as GSSChartBuilder;
+            GSSChartForm chartForm = (FormManager.Forms.Find(m => m.GetType() == typeof(DiscordForm)) as DiscordForm).ChartForm;
+
+            if (gssChartBuilder == null || chartForm == null || chartForm.IsDisposed)
+                return null;
+
 
             string path = null;
             bool isSave = false;
@@ -96,53 +111,14 @@ namespace ServerHelper.Core.DiscordBot.Commands
                 {
                     await gssChartBuilder.UpdateGraphAsync();
 
-                    FocusDiscodForm();
                     path = await gssChartBuilder.SaveImageAsync();
                     isSave = true;
                 }
                 catch (InvalidOperationException) { isSave = false; }
                 catch (Exception) { throw; }
-                finally { UnfocusDiscordForm(); }
             }
 
             return path;
-        }
-        private void FocusDiscodForm()
-        {
-
-            activeForm = mainForm.ActiveChieldForm;
-            activeButton = mainForm.CurrentButton;
-            mainForm.Invoke((Action)(() => { mainForm.Enabled = false; }));
-
-            if (mainForm.IsMinimize)
-                appWasMinimize = true;
-            else appWasMinimize = false;
-
-            if (mainForm.ActiveChieldForm.GetType() == typeof(DiscordForm) && !mainForm.IsMinimize)
-                return;
-
-            else
-            {
-                mainForm.Invoke((Action)(() =>
-                {
-                    mainForm.Maximize();
-                    mainForm.OpenChildForm(discordForm, mainForm.Controls.Find("discord_btn", true)[0], mainForm.CurrentColorTheme);
-                }));
-            }
-        }
-        private void UnfocusDiscordForm()
-        {
-            mainForm.Invoke((Action)(() => { mainForm.Enabled = true; }));
-
-            if (appWasMinimize)
-                mainForm.Invoke((Action)(() => { mainForm.Minimize(); }));
-
-            if (mainForm.ActiveChieldForm == activeForm)
-                return;
-            else
-            {
-                mainForm.Invoke((Action)(() => { mainForm.OpenChildForm(activeForm, activeButton); }));
-            }
         }
     }
 }

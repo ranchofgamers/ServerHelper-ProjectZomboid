@@ -68,7 +68,10 @@ namespace ServerHelper.Forms
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Произошла ошибка при попытке сохранения данных: " + ex.Message);
+                MessageBox.Show("Произошла ошибка при попытке сохранения данных: " + ex.Message,
+                                "Ошибка сохраненя данных",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
             }
 
         }

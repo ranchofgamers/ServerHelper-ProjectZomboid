@@ -403,7 +403,10 @@ namespace ServerHelper.Forms
             }
             catch (Exception ex)
             {
-                MessageBox.Show("Произошла ошибка при попытке сохранения данных: " + ex.Message);
+                MessageBox.Show("Произошла ошибка при попытке сохранения данных: " + ex.Message,
+                                 "Ошибка сохраненя данных",
+                                 MessageBoxButtons.OK,
+                                 MessageBoxIcon.Error);
             }
         }
         private async void rconSendCommand_btn_Click(object sender, EventArgs e)
@@ -444,7 +447,10 @@ namespace ServerHelper.Forms
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Произошла ошибка при попытке сохранения данных: {ex.Message}");
+                MessageBox.Show("Произошла ошибка при попытке сохранения данных: " + ex.Message,
+                                "Ошибка сохраненя данных",
+                                MessageBoxButtons.OK,
+                                MessageBoxIcon.Error);
             }
         }
         private void changeServerStartFilePath_btn_Click(object sender, EventArgs e)
