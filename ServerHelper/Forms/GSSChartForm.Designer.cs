@@ -89,7 +89,7 @@
             title1.Text = "TITLE";
             this.GSSChartBox.Titles.Add(title1);
             // 
-            // GSSCraphForm
+            // GSSChartForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -99,8 +99,8 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.MaximumSize = new System.Drawing.Size(900, 800);
             this.MinimumSize = new System.Drawing.Size(900, 800);
-            this.Name = "GSSCraphForm";
-            this.Text = "GSSCraphForm";
+            this.Name = "GSSChartForm";
+            this.Text = "GSS График";
             ((System.ComponentModel.ISupportInitialize)(this.GSSChartBox)).EndInit();
             this.ResumeLayout(false);
 
