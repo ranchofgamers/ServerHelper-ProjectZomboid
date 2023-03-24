@@ -599,7 +599,6 @@ namespace ServerHelper.Forms
                 }
                 else if (IsServerRestarting)
                 {
-                    //TODO: Тестим этот else if
                     serverAutoRestart_lbl.ForeColor = Color.Red;
                     serverAutoRestart_lbl.Text = "Сервер перезапускается...";
                     RestartMessageTimer.Stop();

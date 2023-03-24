@@ -91,22 +91,31 @@ namespace ServerHelper.Forms
         }
         private async Task SwitchBotState()
         {
-            EverySecond.Tick -= BotAutoReconnect;
-            EverySecond.Tick += BotAutoReconnect;
+            try
+            {
+                EverySecond.Tick -= BotAutoReconnect;
+                EverySecond.Tick += BotAutoReconnect;
 
-            if (!DiscordBot.IsOnline && !DiscordBot.IsConnecting && !DiscordBot.IsDisconnecting)
-            {
-                DiscordBot.UpdateInfo(Settings.Default.DiscordBotToken, Settings.Default.DiscordServerId, "Main");
-                await DiscordBot.RunAsync();
-                UpdateControls();
+                if (!DiscordBot.IsOnline && !DiscordBot.IsConnecting && !DiscordBot.IsDisconnecting)
+                {
+                    DiscordBot.UpdateInfo(Settings.Default.DiscordBotToken, Settings.Default.DiscordServerId, "Main");
+                    await DiscordBot.RunAsync();
+                    UpdateControls();
+                }
+                else if (DiscordBot.IsOnline && !DiscordBot.IsConnecting && !DiscordBot.IsDisconnecting)
+                {
+                    await DiscordBot.StopAsync();
+                    UpdateControls();
+                }
+                else
+                {
+                    await DiscordBot.ResetStateAsync();
+                    UpdateControls();
+                }
             }
-            else if (DiscordBot.IsOnline && !DiscordBot.IsConnecting && !DiscordBot.IsDisconnecting)
+            catch (Exception ex)
             {
-                await DiscordBot.StopAsync();
-                UpdateControls();
-            }
-            else
-            {
+                WriteMessageToLogTextBox($"Во время изменения состояния бота возникло исключение. Состояние сброшено. Текст исключения: {ex.Message}");
                 await DiscordBot.ResetStateAsync();
                 UpdateControls();
             }
