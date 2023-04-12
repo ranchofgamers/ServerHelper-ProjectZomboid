@@ -32,43 +32,47 @@ namespace ServerHelper.Core.DiscordBot.Commands
         {
             Commands = new List<ICommand>();
 
-            string json = File.ReadAllText(JsonFilePath);
-            var commands = JArray.Parse(json);
-            foreach (JObject command in commands)
+            try
             {
-                foreach (KeyValuePair<string, JToken> com in command)
+                string json = File.ReadAllText(JsonFilePath);
+                var commands = JArray.Parse(json);
+                foreach (JObject command in commands)
                 {
-                    try
+                    foreach (KeyValuePair<string, JToken> com in command)
                     {
-                        var comTypeName = com.Key;
-                        var prefix = (string)com.Value["Prefix"];
-                        var name = (string)com.Value["Name"];
-                        var description = (string)com.Value["Description"];
-                        var channelIds = (com.Value["ChannelIds"] as JArray)?.ToObject<ulong[]>();
-                        var roles = (com.Value["Roles"] as JArray)?.ToObject<string[]>();
-                        var RunFromChat = (bool)com.Value["RunFromChat"];
-                        var RunFromCode = (bool)com.Value["RunFromCode"];
+                        try
+                        {
+                            var comTypeName = com.Key;
+                            var prefix = (string)com.Value["Prefix"];
+                            var name = (string)com.Value["Name"];
+                            var description = (string)com.Value["Description"];
+                            var channelIds = (com.Value["ChannelIds"] as JArray)?.ToObject<ulong[]>();
+                            var roles = (com.Value["Roles"] as JArray)?.ToObject<string[]>();
+                            var RunFromChat = (bool)com.Value["RunFromChat"];
+                            var RunFromCode = (bool)com.Value["RunFromCode"];
 
-                        if (channelIds?.Length == 0)
-                            channelIds = null;
+                            if (channelIds?.Length == 0)
+                                channelIds = null;
 
-                        if (roles?.Length == 0)
-                            roles = null;
+                            if (roles?.Length == 0)
+                                roles = null;
 
-                        var commandType = Type.GetType(comTypeName);
-                        if (commandType == null)
-                            continue;
+                            var commandType = Type.GetType(comTypeName);
+                            if (commandType == null)
+                                continue;
 
-                        if (!typeof(ICommand).IsAssignableFrom(commandType))
-                            continue;
+                            if (!typeof(ICommand).IsAssignableFrom(commandType))
+                                continue;
 
-                        var currentCommand = Activator.CreateInstance(commandType,true) as ICommand;
-                        currentCommand.Config = new CommandConfig(prefix, name, description, channelIds, roles, RunFromChat, RunFromCode);
-                        Commands.Add(currentCommand);
+                            var currentCommand = Activator.CreateInstance(commandType, true) as ICommand;
+                            currentCommand.Config = new CommandConfig(prefix, name, description, channelIds, roles, RunFromChat, RunFromCode);
+                            Commands.Add(currentCommand);
+                        }
+                        catch (Exception) { continue; }
                     }
-                    catch (Exception) { continue; }
                 }
             }
+            catch (Exception) { }
         }
     }
 }
