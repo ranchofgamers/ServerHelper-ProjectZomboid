@@ -27,7 +27,7 @@ namespace ServerHelper.Core.MapResetTool
                     DefaultBrush = new SolidBrush(Color.FromArgb(128, 200, 35, 35));
                     break;
                 case MapZoneType.Claim:
-                    DefaultBrush = new SolidBrush(Color.FromArgb(128, 25, 160, 190));
+                    DefaultBrush = new SolidBrush(Color.FromArgb(128, 170, 0, 255));
                     break;
                 case MapZoneType.NoZombiesTerritory:
                     DefaultBrush = new SolidBrush(Color.FromArgb(128, 40, 180, 60));
